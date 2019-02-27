@@ -152,8 +152,9 @@ def test_simple_write_read_success(caplog):
         with two_phase_open(stage_files.primary, 'r') as f:
             assert str(stage_files.primary) == f.name
             assert texts.temporary == f.read()
-        with open(stage_files.backup, 'r') as f:
-            assert texts.backup == f.read()
+        assert texts.backup == stage_files.backup.read_text()
+        # rmv with open(stage_files.backup, 'r') as f:
+        # rmv     assert texts.backup == f.read()
 
 def test_recovery_havetemporary_haveprimary_nobackup(caplog):
     caplog.set_level(logging.INFO)
@@ -246,5 +247,6 @@ def test_recovery_notemporary_noprimary_havebackup_writing(caplog):
         with two_phase_open(stage_files.primary, 'r') as f:
             assert str(stage_files.primary) == f.name
             assert texts.primary == f.read()
-        with open(stage_files.backup, 'r') as f:
-            assert texts.backup == f.read()
+        assert texts.backup == stage_files.backup.read_text()
+        # rmv with open(stage_files.backup, 'r') as f:
+        # rmv     assert texts.backup == f.read()
