@@ -57,8 +57,10 @@ class TwoPhaserStageFiles(ByWhichFiles):
     def __enter__(self):
         self._temporary_directory = tempfile.TemporaryDirectory()
         self._directory = Path(self._temporary_directory.name)
-        self._stem_file = tempfile.TemporaryFile(dir=str(self._directory))
-        self._stem = Path(self._stem_file.name).stem
+        stem = ''.join([random.choice('abcdefghijklmnopqrstuvwxyz') for i1 in range(8)])
+        # rmv self._stem_file = tempfile.TemporaryFile(dir=str(self._directory))
+        # rmv self._stem = Path(self._stem_file.name).stem
+        self._stem = stem
         self._base = self._directory / self._stem
         self._data[WhichFiles.PRIMARY] = self._base.with_suffix('.txt')
         self._data[WhichFiles.BACKUP] = self._base.with_suffix('.txt.bak')
@@ -66,7 +68,7 @@ class TwoPhaserStageFiles(ByWhichFiles):
         self._data[WhichFiles.PROBE] = self._base.with_suffix('.txt.prb')
         return self
     def __exit__(self, exc_type, exc_value, traceback):
-        self._stem_file.close()
+        # rmv self._stem_file.close()
         self._temporary_directory.cleanup()
         assert not self._directory.exists()
         return False
