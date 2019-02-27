@@ -57,7 +57,7 @@ class TwoPhaserStageFiles(ByWhichFiles):
     def __enter__(self):
         self._temporary_directory = tempfile.TemporaryDirectory()
         self._directory = Path(self._temporary_directory.name)
-        self._stem_file = tempfile.TemporaryFile(dir=self._directory)
+        self._stem_file = tempfile.TemporaryFile(dir=str(self._directory))
         self._stem = Path(self._stem_file.name).stem
         self._base = self._directory / self._stem
         self._data[WhichFiles.PRIMARY] = self._base.with_suffix('.txt')
