@@ -138,8 +138,9 @@ def test_simple_write_read_success(caplog):
         with two_phase_open(stage_files.primary, 'r') as f:
             assert str(stage_files.primary) == f.name
             assert texts.backup == f.read()
-        with open(stage_files.backup, 'r') as f:
-            assert texts.primary == f.read()
+        assert texts.primary == stage_files.backup.read_text()
+        # rmv with open(stage_files.backup, 'r') as f:
+        # rmv     assert texts.primary == f.read()
         # Third write: both exist
         with two_phase_open(stage_files.primary, 'w') as f:
             assert str(stage_files.temporary) == f.name
