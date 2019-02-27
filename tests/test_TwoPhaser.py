@@ -58,8 +58,6 @@ class TwoPhaserStageFiles(ByWhichFiles):
         self._temporary_directory = tempfile.TemporaryDirectory()
         self._directory = Path(self._temporary_directory.name)
         stem = ''.join([random.choice('abcdefghijklmnopqrstuvwxyz') for i1 in range(8)])
-        # rmv self._stem_file = tempfile.TemporaryFile(dir=str(self._directory))
-        # rmv self._stem = Path(self._stem_file.name).stem
         self._stem = stem
         self._base = self._directory / self._stem
         self._data[WhichFiles.PRIMARY] = self._base.with_suffix('.txt')
@@ -68,7 +66,6 @@ class TwoPhaserStageFiles(ByWhichFiles):
         self._data[WhichFiles.PROBE] = self._base.with_suffix('.txt.prb')
         return self
     def __exit__(self, exc_type, exc_value, traceback):
-        # rmv self._stem_file.close()
         self._temporary_directory.cleanup()
         assert not self._directory.exists()
         return False
@@ -139,8 +136,6 @@ def test_simple_write_read_success(caplog):
             assert str(stage_files.primary) == f.name
             assert texts.backup == f.read()
         assert texts.primary == stage_files.backup.read_text()
-        # rmv with open(stage_files.backup, 'r') as f:
-        # rmv     assert texts.primary == f.read()
         # Third write: both exist
         with two_phase_open(stage_files.primary, 'w') as f:
             assert str(stage_files.temporary) == f.name
@@ -153,8 +148,6 @@ def test_simple_write_read_success(caplog):
             assert str(stage_files.primary) == f.name
             assert texts.temporary == f.read()
         assert texts.backup == stage_files.backup.read_text()
-        # rmv with open(stage_files.backup, 'r') as f:
-        # rmv     assert texts.backup == f.read()
 
 def test_recovery_havetemporary_haveprimary_nobackup(caplog):
     caplog.set_level(logging.INFO)
@@ -248,5 +241,3 @@ def test_recovery_notemporary_noprimary_havebackup_writing(caplog):
             assert str(stage_files.primary) == f.name
             assert texts.primary == f.read()
         assert texts.backup == stage_files.backup.read_text()
-        # rmv with open(stage_files.backup, 'r') as f:
-        # rmv     assert texts.backup == f.read()
